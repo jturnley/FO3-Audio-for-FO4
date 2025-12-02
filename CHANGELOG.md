@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-12-02
+
+### Added
+
+- MP3 to WAV conversion for music files (FO4 BA2 doesn't properly support MP3)
+- Uses ffmpeg for audio conversion (must be in PATH)
+
+### Changed
+
+- Default output directory now set to Fallout 4 Data folder
+- ESM and BA2 files are placed directly in FO4 Data (no subfolder)
+- Temp files moved to system TEMP folder to avoid clutter
+
+### Improved
+
+- Better FO4 integration - mod files ready to use immediately after build
+
 ## [1.0.0] - 2025-12-01
 
 ### Added

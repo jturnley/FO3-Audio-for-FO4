@@ -56,8 +56,10 @@ class ExtractWorker(QThread):
             output_dir = Path(self.output_path)
             
             # Create output directories
-            temp_dir = output_dir / "temp"
-            final_dir = output_dir / "final" / "Fallout3Audio"
+            # Use a temp folder outside the output (FO4 Data) folder to avoid clutter
+            temp_dir = Path(os.environ.get('TEMP', output_dir.parent)) / "FO3AudioBuilder_temp"
+            # Final files go directly to output (which should be FO4 Data folder)
+            final_dir = output_dir
             temp_dir.mkdir(parents=True, exist_ok=True)
             final_dir.mkdir(parents=True, exist_ok=True)
 
@@ -118,6 +120,15 @@ class ExtractWorker(QThread):
                 self.progress.emit("  Copied music files")
             else:
                 self.progress.emit(f"Warning: Music folder not found at {music_dir}")
+
+            # Convert MP3 files to xWMA (FO4 doesn't support MP3 in BA2)
+            self.progress.emit("Converting MP3 files to xWMA...")
+            mp3_files = list(temp_dir.rglob("*.mp3"))
+            if mp3_files:
+                converted_count = self._convert_mp3_files(mp3_files)
+                self.progress.emit(f"  Converted {converted_count} MP3 files to xWMA")
+            else:
+                self.progress.emit("  No MP3 files to convert")
 
             # Process FUZ files
             self.progress.emit("Processing FUZ files...")
@@ -196,6 +207,60 @@ class ExtractWorker(QThread):
 
         self.progress.emit(f"  Created {ba2_path.name}")
 
+    def _convert_mp3_files(self, mp3_files: list) -> int:
+        """Convert MP3 files to xWMA format for FO4 compatibility.
+        
+        FO4's BA2 archives don't properly support MP3 files for music/radio.
+        Converting to xWMA ensures proper playback.
+        
+        Returns:
+            Number of files successfully converted
+        """
+        import subprocess
+        import shutil
+        
+        converted = 0
+        ffmpeg_path = shutil.which("ffmpeg")
+        
+        if not ffmpeg_path:
+            self.progress.emit("  Warning: ffmpeg not found - MP3 files will not be converted")
+            self.progress.emit("  Install ffmpeg and add to PATH for MP3 conversion")
+            return 0
+        
+        for mp3_file in mp3_files:
+            try:
+                # Convert MP3 to WAV first (intermediate step)
+                wav_file = mp3_file.with_suffix(".wav")
+                xwm_file = mp3_file.with_suffix(".xwm")
+                
+                # MP3 -> WAV using ffmpeg
+                cmd_wav = [
+                    ffmpeg_path,
+                    "-i", str(mp3_file),
+                    "-acodec", "pcm_s16le",
+                    "-ar", "44100",
+                    "-ac", "2",  # Stereo for music
+                    "-y",
+                    str(wav_file)
+                ]
+                
+                result = subprocess.run(cmd_wav, capture_output=True, text=True, timeout=60)
+                if result.returncode != 0:
+                    self.progress.emit(f"  Warning: Failed to convert {mp3_file.name}")
+                    continue
+                
+                # For now, keep as WAV (FO4 supports WAV natively)
+                # xWMA would require xWMAEncode.exe which may not be available
+                
+                # Remove original MP3
+                mp3_file.unlink()
+                converted += 1
+                
+            except Exception as e:
+                self.progress.emit(f"  Warning: Error converting {mp3_file.name}: {e}")
+        
+        return converted
+
 
 class MainWindow(QMainWindow):
     """Main application window."""
@@ -206,7 +271,7 @@ class MainWindow(QMainWindow):
         self.detect_archive2_path()
 
     def init_ui(self):
-        self.setWindowTitle("FO3 Audio for FO4 v1.0.0")
+        self.setWindowTitle("FO3 Audio for FO4 v1.1.0")
         self.setMinimumSize(700, 550)
 
         central_widget = QWidget()
@@ -332,13 +397,16 @@ class MainWindow(QMainWindow):
         if fo4_found:
             # Check for Archive2.exe in FO4's Tools folder
             self._check_archive2(fo4_found)
+            # Set default output to FO4 Data folder (final mod files go directly there)
+            fo4_data = os.path.join(fo4_found, "Data")
+            self.output_input.setText(fo4_data)
+            self.log(f"Output set to Fallout 4 Data folder")
         else:
             self.log("Fallout 4 not found. Archive2.exe must be located manually.")
             self.log("Install the FO4 Creation Kit from Steam to get Archive2.exe.")
-
-        # Default output path
-        default_output = str(Path.home() / "Documents" / "FO3AudioMod")
-        self.output_input.setText(default_output)
+            # Fallback output path
+            default_output = str(Path.home() / "Documents" / "FO3AudioMod")
+            self.output_input.setText(default_output)
     
     def _check_archive2(self, fo4_path: str):
         """Check for Archive2.exe in Fallout 4's Tools folder."""

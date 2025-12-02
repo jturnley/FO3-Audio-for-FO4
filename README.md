@@ -1,6 +1,6 @@
 # Fallout 3 Audio Repository Builder for Fallout 4
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/jturnley/FO3-Audio-for-FO4/releases/tag/v1.0.0)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/jturnley/FO3-Audio-for-FO4/releases/tag/v1.1.0)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-yellow.svg)](https://www.python.org/)
 
