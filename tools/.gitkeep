@@ -1,0 +1,3 @@
+# Place external tools here
+# Required: xWMAEncode.exe (from Microsoft DirectX SDK)
+# Optional: ffmpeg.exe

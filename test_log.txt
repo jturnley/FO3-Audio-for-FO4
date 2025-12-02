@@ -1,0 +1,52 @@
+2025-12-01 16:02:25,781 - __main__ - INFO - ============================================================
+2025-12-01 16:02:25,781 - __main__ - INFO - Fallout 3 Audio Repository Builder for Fallout 4
+2025-12-01 16:02:25,781 - __main__ - INFO - ============================================================
+2025-12-01 16:02:25,782 - __main__ - INFO - Scanning Fallout 3 Data folder: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data
+2025-12-01 16:02:25,782 - __main__ - INFO - Found BSA files: ['sound', 'voices', 'menu_voices', 'dlc_sounds', 'music']
+2025-12-01 16:02:25,782 - __main__ - INFO - Extracting sound BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - Sound.bsa
+2025-12-01 16:02:25,782 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - Sound.bsa
+2025-12-01 16:02:27,333 - bsa_extractor - INFO - Extracted 2709 files to output\full_test\extracted\sound
+2025-12-01 16:02:27,473 - __main__ - INFO - Extracting voices BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - Voices.bsa
+2025-12-01 16:02:27,473 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - Voices.bsa
+2025-12-01 16:02:54,135 - bsa_extractor - INFO - Extracted 51553 files to output\full_test\extracted\voices
+2025-12-01 16:02:54,318 - __main__ - INFO - Extracting menu voices BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - MenuVoices.bsa
+2025-12-01 16:02:54,318 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Fallout - MenuVoices.bsa
+2025-12-01 16:03:16,064 - bsa_extractor - INFO - Extracted 38525 files to output\full_test\extracted\menu_voices
+2025-12-01 16:03:16,220 - __main__ - INFO - Extracting DLC sound BSA: Anchorage - Sounds.bsa
+2025-12-01 16:03:16,220 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Anchorage - Sounds.bsa
+2025-12-01 16:03:16,311 - bsa_extractor - INFO - Extracted 120 files to output\full_test\extracted\dlc\Anchorage
+2025-12-01 16:03:16,322 - __main__ - INFO - Extracting DLC sound BSA: ThePitt - Sounds.bsa
+2025-12-01 16:03:16,322 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\ThePitt - Sounds.bsa
+2025-12-01 16:03:16,403 - bsa_extractor - INFO - Extracted 112 files to output\full_test\extracted\dlc\ThePitt
+2025-12-01 16:03:16,411 - __main__ - INFO - Extracting DLC sound BSA: BrokenSteel - Sounds.bsa
+2025-12-01 16:03:16,411 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\BrokenSteel - Sounds.bsa
+2025-12-01 16:03:16,477 - bsa_extractor - INFO - Extracted 79 files to output\full_test\extracted\dlc\BrokenSteel
+2025-12-01 16:03:16,483 - __main__ - INFO - Extracting DLC sound BSA: PointLookout - Sounds.bsa
+2025-12-01 16:03:16,483 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\PointLookout - Sounds.bsa
+2025-12-01 16:03:16,571 - bsa_extractor - INFO - Extracted 122 files to output\full_test\extracted\dlc\PointLookout
+2025-12-01 16:03:16,580 - __main__ - INFO - Extracting DLC sound BSA: Zeta - Sounds.bsa
+2025-12-01 16:03:16,580 - bsa_extractor - INFO - Extracting BSA: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Zeta - Sounds.bsa
+2025-12-01 16:03:16,731 - bsa_extractor - INFO - Extracted 200 files to output\full_test\extracted\dlc\Zeta
+2025-12-01 16:03:16,743 - __main__ - INFO - Copying music files from: D:\SteamLibrary\steamapps\common\Fallout 3 goty\Data\Music
+2025-12-01 16:03:16,877 - __main__ - INFO - Processing FUZ files...
+2025-12-01 16:03:22,883 - __main__ - INFO - Found 48517 audio files to process
+2025-12-01 16:03:22,883 - __main__ - INFO - Using original audio files (no conversion needed for FO4 BA2)
+2025-12-01 16:03:22,883 - __main__ - INFO - Building BA2 archive...
+2025-12-01 16:03:22,884 - __main__ - INFO - Using Archive2.exe: D:\SteamLibrary\steamapps\common\Fallout 4\Tools\Archive2\Archive2.exe
+2025-12-01 16:04:04,600 - __main__ - INFO - Creating archive: Fallout3Audio - Main.ba2
+2025-12-01 16:07:11,351 - __main__ - INFO - Created: Fallout3Audio - Main.ba2
+2025-12-01 16:07:11,351 - ba2_builder - INFO - Created BA2 archive: C:\Users\jturn\.Code\FO3 Audio for FO4\output\full_test\final\Fallout3Audio\Fallout3Audio - Main.ba2
+2025-12-01 16:07:16,426 - __main__ - INFO - Generating ESM plugin...
+2025-12-01 16:07:18,066 - plugin_generator - INFO - Generating plugin: output\full_test\final\Fallout3Audio\Fallout3Audio.esm
+2025-12-01 16:07:18,138 - plugin_generator - INFO - Created plugin: output\full_test\final\Fallout3Audio\Fallout3Audio.esm (48517 records, ESL=True)
+2025-12-01 16:07:18,138 - __main__ - INFO - ============================================================
+2025-12-01 16:07:18,138 - __main__ - INFO - BUILD COMPLETE!
+2025-12-01 16:07:18,138 - __main__ - INFO - ============================================================
+2025-12-01 16:07:18,138 - __main__ - INFO - Output directory: output\full_test\final\Fallout3Audio
+2025-12-01 16:07:18,139 - __main__ - INFO - BA2 Archive: Fallout3Audio - Main.ba2
+2025-12-01 16:07:18,139 - __main__ - INFO - Plugin: Fallout3Audio.esm (ESL=Yes)
+2025-12-01 16:07:18,139 - __main__ - INFO - Total audio files: 48517
+2025-12-01 16:07:18,139 - __main__ - INFO - 
+2025-12-01 16:07:18,139 - __main__ - INFO - To install:
+2025-12-01 16:07:18,139 - __main__ - INFO -   1. Copy 'Fallout3Audio' folder to Fallout 4/Data/
+2025-12-01 16:07:18,139 - __main__ - INFO -   2. Enable 'Fallout3Audio.esm' in your mod manager or plugins.txt

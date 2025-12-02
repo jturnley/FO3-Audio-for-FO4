@@ -1,0 +1,8 @@
+# Fallout 3 Audio Repository Builder for Fallout 4
+# Minimal dependencies for runtime
+
+# GUI framework
+PyQt6>=6.6.0
+
+# Build executable
+pyinstaller>=6.0.0
