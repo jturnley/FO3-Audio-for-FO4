@@ -208,49 +208,34 @@ class ExtractWorker(QThread):
         self.progress.emit(f"  Created {ba2_path.name}")
 
     def _convert_mp3_files(self, mp3_files: list) -> int:
-        """Convert MP3 files to xWMA format for FO4 compatibility.
+        """Convert MP3 files to WAV format for FO4 compatibility.
         
         FO4's BA2 archives don't properly support MP3 files for music/radio.
-        Converting to xWMA ensures proper playback.
+        Converting to WAV ensures proper playback.
+        
+        Uses miniaudio (MIT licensed) for self-contained MP3 decoding.
         
         Returns:
             Number of files successfully converted
         """
-        import subprocess
-        import shutil
+        import wave
+        import miniaudio
         
         converted = 0
-        ffmpeg_path = shutil.which("ffmpeg")
-        
-        if not ffmpeg_path:
-            self.progress.emit("  Warning: ffmpeg not found - MP3 files will not be converted")
-            self.progress.emit("  Install ffmpeg and add to PATH for MP3 conversion")
-            return 0
         
         for mp3_file in mp3_files:
             try:
-                # Convert MP3 to WAV first (intermediate step)
+                # Decode MP3 to raw PCM using miniaudio
+                decoded = miniaudio.decode_file(str(mp3_file))
+                
+                # Convert to WAV
                 wav_file = mp3_file.with_suffix(".wav")
-                xwm_file = mp3_file.with_suffix(".xwm")
                 
-                # MP3 -> WAV using ffmpeg
-                cmd_wav = [
-                    ffmpeg_path,
-                    "-i", str(mp3_file),
-                    "-acodec", "pcm_s16le",
-                    "-ar", "44100",
-                    "-ac", "2",  # Stereo for music
-                    "-y",
-                    str(wav_file)
-                ]
-                
-                result = subprocess.run(cmd_wav, capture_output=True, text=True, timeout=60)
-                if result.returncode != 0:
-                    self.progress.emit(f"  Warning: Failed to convert {mp3_file.name}")
-                    continue
-                
-                # For now, keep as WAV (FO4 supports WAV natively)
-                # xWMA would require xWMAEncode.exe which may not be available
+                with wave.open(str(wav_file), 'wb') as wav:
+                    wav.setnchannels(decoded.nchannels)
+                    wav.setsampwidth(2)  # 16-bit
+                    wav.setframerate(decoded.sample_rate)
+                    wav.writeframes(decoded.samples)
                 
                 # Remove original MP3
                 mp3_file.unlink()
@@ -271,7 +256,7 @@ class MainWindow(QMainWindow):
         self.detect_archive2_path()
 
     def init_ui(self):
-        self.setWindowTitle("FO3 Audio for FO4 v1.1.0")
+        self.setWindowTitle("FO3 Audio for FO4 v1.2.0")
         self.setMinimumSize(700, 550)
 
         central_widget = QWidget()

@@ -4,5 +4,8 @@
 # GUI framework
 PyQt6>=6.6.0
 
+# Audio conversion (MIT licensed, self-contained MP3 decoding)
+miniaudio>=1.61
+
 # Build executable
 pyinstaller>=6.0.0

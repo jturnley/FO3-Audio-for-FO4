@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-12-02
+
+### Changed
+
+- Replaced ffmpeg dependency with miniaudio for MP3 conversion
+- MP3 to WAV conversion is now self-contained (no external tools required)
+- Application is fully standalone - users don't need to install anything
+
+### Technical Details
+
+- miniaudio (MIT licensed) provides built-in MP3 decoding
+- Converted MP3 files use 16-bit stereo PCM WAV format at 44.1kHz
+- No external dependencies required for audio conversion
+
 ## [1.1.0] - 2025-12-02
 
 ### Added
