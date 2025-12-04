@@ -256,7 +256,7 @@ class MainWindow(QMainWindow):
         self.detect_archive2_path()
 
     def init_ui(self):
-        self.setWindowTitle("FO3 Audio for FO4 v1.2.0")
+        self.setWindowTitle("FO3 Audio for FO4 v1.3.0")
         self.setMinimumSize(700, 550)
 
         central_widget = QWidget()

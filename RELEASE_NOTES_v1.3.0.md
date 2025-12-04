@@ -1,4 +1,4 @@
-# FO3 Audio Builder v1.2.0 Release Notes
+# FO3 Audio Builder v1.3.0 Release Notes
 
 ## Self-Contained Audio Conversion
 
