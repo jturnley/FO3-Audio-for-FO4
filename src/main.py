@@ -12,14 +12,12 @@ if getattr(sys, 'frozen', False):
     from src.audio_converter import AudioConverter
     from src.fuz_processor import FUZProcessor
     from src.ba2_builder import BA2Builder, Archive2Builder
-    from src.plugin_generator import PluginGenerator
 else:
     # Running from source
     from bsa_extractor import BSAExtractor
     from audio_converter import AudioConverter
     from fuz_processor import FUZProcessor
     from ba2_builder import BA2Builder, Archive2Builder
-    from plugin_generator import PluginGenerator
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -38,7 +36,7 @@ def setup_logging(verbose: bool = False) -> None:
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Extract Fallout 3 audio/music and build Fallout 4 BA2 + ESM/ESL plugin"
+        description="Extract Fallout 3 audio/music and build Fallout 4 BA2 archive"
     )
     
     # Mode selection
@@ -83,17 +81,6 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path("output"),
         help="Output directory for all generated files (default: output)",
-    )
-    output_group.add_argument(
-        "--mod-name",
-        type=str,
-        default="Fallout3Audio",
-        help="Name for the generated mod (default: Fallout3Audio)",
-    )
-    output_group.add_argument(
-        "--no-esl",
-        action="store_true",
-        help="Don't flag the ESM as ESL (creates full ESM instead)",
     )
     output_group.add_argument(
         "--compress",
@@ -236,19 +223,18 @@ def main() -> None:
     audio_converter = AudioConverter(tools_dir=args.tools_dir)
     fuz_processor = FUZProcessor()
     ba2_builder = BA2Builder(compress=args.compress)
-    plugin_gen = PluginGenerator(args.mod_name, as_esl=not args.no_esl)
 
     # Create output directories
     output_dir = args.output_dir
     extracted_dir = output_dir / "extracted"
     converted_dir = output_dir / "converted"
-    final_dir = output_dir / "final" / args.mod_name
+    final_dir = output_dir / "final" / "Fallout3Audio"
     
     for d in [extracted_dir, converted_dir, final_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
     # Determine input sources
-    bsa_files: dict[str, Path] = {}
+    bsa_files: dict[str, Path | list[Path]] = {}
     
     if args.fo3_data:
         logger.info(f"Scanning Fallout 3 Data folder: {args.fo3_data}")
@@ -360,8 +346,8 @@ def main() -> None:
 
     # Step 4: Build BA2 archive
     logger.info("Building BA2 archive...")
-    
-    ba2_path = final_dir / f"{args.mod_name} - Main.ba2"
+
+    ba2_path = final_dir / "Fallout3Audio - Main.ba2"
     
     # Use Archive2.exe if available (recommended)
     archive2_path = args.archive2 or find_archive2()
@@ -381,9 +367,9 @@ def main() -> None:
             elif "voice" in str(audio_file).lower():
                 try:
                     rel = audio_file.relative_to(converted_dir)
-                    archive_path = Path("Sound/Voice") / f"{args.mod_name}.esm" / rel
+                    archive_path = Path("Sound/Voice") / rel
                 except ValueError:
-                    archive_path = Path("Sound/Voice") / f"{args.mod_name}.esm" / audio_file.name
+                    archive_path = Path("Sound/Voice") / audio_file.name
             else:
                 archive_path = Path("Sound/FX") / audio_file.name
             
@@ -419,9 +405,9 @@ def main() -> None:
             elif "voice" in str(audio_file).lower():
                 try:
                     rel = audio_file.relative_to(converted_dir)
-                    archive_path = f"Sound/Voice/{args.mod_name}.esm/{rel}"
+                    archive_path = f"Sound/Voice/{rel}"
                 except ValueError:
-                    archive_path = f"Sound/Voice/{args.mod_name}.esm/{audio_file.name}"
+                    archive_path = f"Sound/Voice/{audio_file.name}"
             else:
                 archive_path = f"Sound/FX/{audio_file.name}"
             
@@ -429,30 +415,6 @@ def main() -> None:
         
         ba2_builder.build(ba2_path)
 
-    # Step 5: Generate ESM plugin
-    logger.info("Generating ESM plugin...")
-    
-    for audio_file in converted_files:
-        editor_id = f"FO3_{audio_file.stem}"
-        editor_id = "".join(c if c.isalnum() else "_" for c in editor_id)[:64]
-        
-        if "music" in str(audio_file).lower():
-            plugin_gen.add_music_track(editor_id, f"Music/{audio_file.name}")
-        else:
-            # Determine sound path in archive
-            if "voice" in str(audio_file).lower():
-                try:
-                    rel = audio_file.relative_to(converted_dir)
-                    sound_path = f"Sound/Voice/{args.mod_name}.esm/{rel}"
-                except ValueError:
-                    sound_path = f"Sound/Voice/{args.mod_name}.esm/{audio_file.name}"
-            else:
-                sound_path = f"Sound/FX/{audio_file.name}"
-            
-            plugin_gen.add_sound_descriptor(editor_id, [sound_path])
-    
-    esm_path = final_dir / f"{args.mod_name}.esm"
-    plugin_gen.generate(esm_path)
 
     # Summary
     logger.info("=" * 60)
@@ -460,12 +422,10 @@ def main() -> None:
     logger.info("=" * 60)
     logger.info(f"Output directory: {final_dir}")
     logger.info(f"BA2 Archive: {ba2_path.name}")
-    logger.info(f"Plugin: {esm_path.name} (ESL={'Yes' if not args.no_esl else 'No'})")
     logger.info(f"Total audio files: {len(converted_files)}")
     logger.info("")
-    logger.info("To install:")
-    logger.info(f"  1. Copy '{final_dir.name}' folder to Fallout 4/Data/")
-    logger.info(f"  2. Enable '{args.mod_name}.esm' in your mod manager or plugins.txt")
+    logger.info("This is a modder's resource - integrate the BA2 into your own mods.")
+    logger.info(f"Copy '{final_dir.name}' folder to Fallout 4/Data/ for reference.")
 
 
 if __name__ == "__main__":

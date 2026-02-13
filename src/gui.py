@@ -44,13 +44,9 @@ class ExtractWorker(QThread):
             if getattr(sys, 'frozen', False):
                 from src.bsa_extractor import BSAExtractor
                 from src.fuz_processor import FUZProcessor
-                from src.repository_builder import RepositoryBuilder
-                from src.plugin_generator import PluginGenerator
             else:
                 from bsa_extractor import BSAExtractor
                 from fuz_processor import FUZProcessor
-                from repository_builder import RepositoryBuilder
-                from plugin_generator import PluginGenerator
 
             fo3_data = Path(self.fo3_data_path)
             output_dir = Path(self.output_path)
@@ -143,23 +139,13 @@ class ExtractWorker(QThread):
             self.progress.emit("Building BA2 archive...")
             self._build_ba2_with_archive2(temp_dir, final_dir)
 
-            # Generate ESM plugin
-            self.progress.emit("Generating ESM plugin...")
-            esm_path = final_dir / "Fallout3Audio.esm"
-            generator = PluginGenerator("Fallout3Audio", as_esl=True)
-            generator.generate_from_audio_files(
-                list(temp_dir.rglob("*.*")),  # All extracted files
-                temp_dir,
-                esm_path
-            )
-            self.progress.emit(f"  Created {esm_path.name}")
 
             # Cleanup temp directory
             self.progress.emit("Cleaning up...")
             import shutil
             shutil.rmtree(temp_dir, ignore_errors=True)
 
-            self.finished.emit(True, f"Mod created successfully at:\n{final_dir}")
+            self.finished.emit(True, f"BA2 archive created successfully at:\n{final_dir}\n\nThis is a modder's resource - integrate into your own mods.")
 
         except Exception as e:
             import traceback

@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-yellow.svg)](https://www.python.org/)
 
-A Python tool to extract Fallout 3 audio and music from BSA archives and build a ready-to-use Fallout 4 mod with BA2 archive and ESM/ESL plugin.
+A Python tool to extract Fallout 3 audio and music from BSA archives and build a BA2 archive for Fallout 4. This is a **modder's resource** - integrate the extracted audio into your own mods.
 
 ## Features
 
@@ -13,8 +13,7 @@ A Python tool to extract Fallout 3 audio and music from BSA archives and build a
 - **FUZ Processing**: Handle FUZ files containing audio and lip sync data
 - **Music Support**: Extract and include Fallout 3 music files
 - **BA2 Building**: Create Fallout 4 BA2 archives using Archive2.exe
-- **ESM/ESL Generation**: Generate plugin files with ESL flag for light plugin support
-- **Ready-to-Install Output**: Creates a complete mod folder structure
+- **Modder's Resource**: Extracted audio ready for integration into your own mods
 
 ## Requirements
 
@@ -65,39 +64,7 @@ Archive2.exe comes with the **Fallout 4 Creation Kit**, available free on Steam:
 
 ## Usage
 
-### GUI Mode (Recommended)
-
-```bash
-python src/main.py --gui
-```
-
-Or run the GUI directly:
-```bash
-python src/gui.py
-```
-
-The GUI will:
-- Auto-detect Fallout 3 and Archive2.exe paths
-- Let you browse for input/output directories
-- Show progress and log output
-
-### Command Line Mode
-
-#### Quick Start (Auto-detect FO3 files)
-
-```bash
-# Point to your Fallout 3 Data folder - auto-detects BSA files and music
-python src/main.py --fo3-data "C:/Games/Fallout 3/Data"
-```
-
-#### With Archive2.exe (Recommended)
-
-```bash
-python src/main.py --fo3-data "C:/Games/Fallout 3/Data" \
-                   --archive2 "C:/Games/Fallout 4/Tools/Archive2/Archive2.exe"
-```
-
-#### Specify Individual BSA Files
+For detailed usage instructions, see [the full documentation](docs/usage.md).
 
 ```bash
 python src/main.py --sound-bsa "path/to/Fallout - Sound.bsa" \
@@ -125,8 +92,6 @@ python src/main.py --sound-bsa "path/to/Fallout - Sound.bsa" \
 | Option | Description |
 |--------|-------------|
 | `--output-dir` | Output directory (default: `output`) |
-| `--mod-name` | Name for the generated mod (default: `Fallout3Audio`) |
-| `--no-esl` | Don't flag the ESM as ESL (creates full ESM) |
 | `--compress` | Compress files in BA2 (NOT recommended for audio) |
 
 #### Tool Options
@@ -149,23 +114,23 @@ FO3-Audio-for-FO4/
 │   ├── audio_converter.py   # Audio format conversion (optional)
 │   ├── fuz_processor.py     # FUZ file processing (lip sync)
 │   ├── ba2_builder.py       # FO4 BA2 archive creation + Archive2 wrapper
-│   ├── plugin_generator.py  # ESM/ESL plugin generation
 │   └── repository_builder.py # File organization utilities
 ├── tools/                   # External tools (optional)
-├── output/                  # Generated mod files
+├── output/                  # Generated audio archives
 ├── requirements.txt         # Python dependencies
 └── README.md               # This file
 ```
 
 ## Output Structure
 
-After running the tool, you'll find your ready-to-install mod in:
+After running the tool, you'll find the extracted audio archive in:
 
 ```
 output/final/Fallout3Audio/
-├── Fallout3Audio.esm        # Plugin file (ESL-flagged by default)
 └── Fallout3Audio - Main.ba2 # Audio archive with all sounds/music
 ```
+
+This is a **modder's resource** - integrate the BA2 archive into your own Fallout 4 mods.
 
 ## Audio Format Notes
 
